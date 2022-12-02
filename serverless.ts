@@ -12,6 +12,30 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs14.x',
     profile: 'nautti_serverless_dell_user',   // AWS user in credentials file, if left default is used
     region: 'us-east-1',  // Default region (if not mentioned explicitly)
+    // Allowing lambda to do anything with Dynamo resource
+    iam: {
+      role: {
+        statements: [
+          {
+            Effect: "Allow",
+            Action: "dynamodb:*",
+            // ARN for dynamodb resource 'arn:aws:dynamodb:${self:provider.region}:${aws.accountId}:table/${self:custom.urlTableName}'
+            Resource: "*"
+            // {
+            //   "Fn::Join": [
+            //     "",
+            //     [
+            //       "arn:",
+            //       "aws:",
+            //       "dynamodb:${aws:region}:${aws.accountId}:",
+            //       "table/${self:custom.urlTableName}",
+            //     ]
+            //   ]
+            // }
+          }
+        ]
+      }
+    },
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -37,12 +61,14 @@ const serverlessConfiguration: AWS = {
   functions,
   // Add custom resources
   resources: {
-    ...dynamoResources
+    Resources: {
+      ...dynamoResources
+    }
   },
   package: { individually: true },
   custom: {
     // Defining our custom variable for table name, <sls-stage> variable will allow us to define type of env like dev or prod
-    urlTableName: '${sls-stage}-url-table',
+    urlTableName: '${sls:stage}-url-table',
     esbuild: {
       bundle: true,
       minify: false,
