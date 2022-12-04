@@ -40,6 +40,7 @@ const serverlessConfiguration: AWS = {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
+    // Export serverless envs to .env file via plugin: https://www.serverless.com/plugins/serverless-export-env
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',

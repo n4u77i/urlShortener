@@ -9,7 +9,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
         const body = JSON.parse(event.body)
 
         // Getting env variables from serverless.ts file environment variables
-        const tableName = process.env.tableName
+        const tableName = process.env.urlTableName
         const baseUrl = process.env.baseUrl
 
         const originalUrl = body.url;
@@ -23,7 +23,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
         }
 
         // Writing to dynamo table
-        await dynamo.write(data, tableName)
+        return await dynamo.write(data, tableName)
 
     } catch (error) {
         console.log('Error', error)
