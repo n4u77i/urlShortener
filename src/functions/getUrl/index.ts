@@ -27,9 +27,12 @@ export const handler = async (event: APIGatewayProxyEvent) => {
         const originalUrl = record.originalUrl
 
         return formatJSONResponse({
-            data: originalUrl
+            statusCode: 301,                    // 301 is HTTP status for Redirection
+            headers: {
+                Location: originalUrl
+            }
         })
-        
+
     } catch (error) {
         console.log('Error', error)
         return formatJSONResponse({
